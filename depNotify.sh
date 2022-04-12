@@ -50,22 +50,22 @@
 # Banner image can be 600px wide by 100px high. Images will be scaled to fit
 # If this variable is left blank, the generic image will appear. If using custom Self
 # Service branding, please see the Customized Self Service Branding area below
-  BANNER_IMAGE_PATH="/Applications/Self Service.app/Contents/Resources/AppIcon.icns"
+  BANNER_IMAGE_PATH="/Users/Shared/RWBadge.icns"
 
 # Update the variable below replacing "Organization" with the actual name of your organization. Example "ACME Corp Inc."
-  ORG_NAME="Organization"
+  ORG_NAME="Ruffwear"
 
 # Main heading that will be displayed under the image
 # If this variable is left blank, the generic banner will appear
-  BANNER_TITLE="Welcome to $ORG_NAME"
-	
+  BANNER_TITLE="Welcome to The Pack!"
+
 # Update the variable below replacing "email helpdesk@company.com" with the actual plaintext instructions for your organization. Example "call 555-1212" or "email helpdesk@company.com"
-  SUPPORT_CONTACT_DETAILS="email helpdesk@company.com"
-  
+  SUPPORT_CONTACT_DETAILS="email kevin@ruffwear.com or text/call 541.230.9539"
+
 # Paragraph text that will display under the main heading. For a new line, use \n
 # If this variable is left blank, the generic message will appear. Leave single
 # quotes below as double quotes will break the new lines.
-  MAIN_TEXT='Thanks for choosing a Mac at '$ORG_NAME'! We want you to have a few applications and settings configured before you get started with your new Mac. This process should take 10 to 20 minutes to complete. \n \n If you need additional software or help, please visit the Self Service app in your Applications folder or on your Dock.'
+  MAIN_TEXT='We want you to have a few applications and settings configured before you get started with your new Mac. This process should take 10 to 45 minutes to complete. \n \n If you need additional approved software please visit the Ruffwear App Store in your Applications folder or on your Dock.'
 
 # Initial Start Status text that shows as things are firing up
   INITAL_START_STATUS="Initial Configuration Starting..."
@@ -126,14 +126,14 @@
 # or Activity Monitor to kill DEP Notify.
 
 # Main heading that will be displayed under the image
-  ERROR_BANNER_TITLE="Uh oh, Something Needs Fixing!"
+  ERROR_BANNER_TITLE="Uh oh, The Huskies are Howling!"
 
 # Paragraph text that will display under the main heading. For a new line, use \n
 # If this variable is left blank, the generic message will appear. Leave single
 # quotes below as double quotes will break the new lines.
-	ERROR_MAIN_TEXT='We are sorry that you are experiencing this inconvenience with your new Mac. However, we have the nerds to get you back up and running in no time! \n \n Please contact IT right away and we will take a look at your computer ASAP. \n \n'	
-	ERROR_MAIN_TEXT="$ERROR_MAIN_TEXT $SUPPORT_CONTACT_DETAILS"	
-	  
+	ERROR_MAIN_TEXT='We are sorry that you are experiencing this inconvenience with your new Mac. However, we have the nerds to get you back up and running in no time! \n \n Please contact IT right away and we will take a look at your computer ASAP. \n \n'
+	ERROR_MAIN_TEXT="$ERROR_MAIN_TEXT $SUPPORT_CONTACT_DETAILS"
+
 # Error status message that is displayed under the progress bar
   ERROR_STATUS="Setup Failed"
 
@@ -152,15 +152,18 @@ TRIGGER="event"
 # The policy array must be formatted "Progress Bar text,customTrigger". These will be
 # run in order as they appear below.
   POLICY_ARRAY=(
-    "Installing Adobe Creative Cloud,adobeCC"
-    "Installing Adobe Reader,adobeReader"
-    "Installing Chrome,chrome"
-    "Installing Firefox,firefox"
-    "Installing Zoom,zoom"
-    "Installing NoMAD,nomad"
-    "Installing Office,msOffice"
-    "Installing Webex,webex"
-    "Installing Critical Updates,updateSoftware"
+  "Installing Rosetta,01_New_Enroll"
+  "Setting up your Dock,02_New_Enroll"
+#   "Installing FortiClient,03_New_Enroll"
+  "Installing Google Chrome,04_New_Enroll"
+  "Installing Google Drive,05_New_Enroll"
+#   "Installing RingCentral,06_New_Enroll"
+  "Installing RW Printers,07_New_Enroll"
+#   "Sending in the Support Huskies,08_New_Enroll"
+#   "Fixing FortiClient,09_New_Enroll"
+  "Deploying LastPass,10_New_Enroll"
+  "Picking up Dog Poop,11_New_Enroll"
+#   "Installing Critical Updates,12_New_Enroll"
   )
 
 #########################################################################################
@@ -184,12 +187,12 @@ TRIGGER="event"
 # Please note, custom branding is downloaded from Jamf Pro after Self Service has opened
 # at least one time. The script is designed to wait until the files have been downloaded.
 # This could take a few minutes depending on server and network resources.
-  SELF_SERVICE_CUSTOM_BRANDING=false # Set variable to true or false
+  SELF_SERVICE_CUSTOM_BRANDING=true # Set variable to true or false
 
 # If using a name other than Self Service with Custom branding. Change the
 # name with the SELF_SERVICE_APP_NAME variable below. Keep .app on the end
-  SELF_SERVICE_APP_NAME="Self Service.app"
-  
+  SELF_SERVICE_APP_NAME="Ruffwear App Store.app"
+
 # Number of seconds to wait (seconds) for the Self Service custon icon.
   SELF_SERVICE_CUSTOM_WAIT=20
 
@@ -225,7 +228,7 @@ TRIGGER="event"
 
   # Registration window title
     REGISTRATION_TITLE="Register Mac at $ORG_NAME"
-    
+
   # Registration status bar text
     REGISTRATION_STATUS="Waiting on completion of computer registration"
 
@@ -531,7 +534,7 @@ TRIGGER="event"
     kill $PREVIOUS_DEP_NOTIFY_PROCESS
     PREVIOUS_DEP_NOTIFY_PROCESS=$(pgrep -l "DEPNotify" | cut -d " " -f1)
   done
-  
+
  # Stop BigHonkingText if it's running (from a PreStage package postinstall script).
  BIG_HONKING_TEXT_PROCESS=$(pgrep -l "BigHonkingText" | cut -d " " -f1)
   until [ "$BIG_HONKING_TEXT_PROCESS" = "" ]; do
@@ -539,7 +542,7 @@ TRIGGER="event"
     kill $BIG_HONKING_TEXT_PROCESS
     BIG_HONKING_TEXT_PROCESS=$(pgrep -l "BigHonkingText" | cut -d " " -f1)
   done
- 
+
 # Adding Check and Warning if Testing Mode is off and BOM files exist
   if [[ ( -f "$DEP_NOTIFY_LOG" || -f "$DEP_NOTIFY_DONE" ) && "$TESTING_MODE" = false ]]; then
     echo "$(date "+%a %h %d %H:%M:%S"): TESTING_MODE set to false but config files were found in /var/tmp. Letting user know and exiting." >> "$DEP_NOTIFY_DEBUG"
@@ -560,7 +563,7 @@ TRIGGER="event"
   # Loop waiting on the branding image to properly show in the users library
 	SELF_SERVICE_COUNTER=0
 	CUSTOM_BRANDING_PNG="/Users/$CURRENT_USER/Library/Application Support/com.jamfsoftware.selfservice.mac/Documents/Images/brandingimage.png"
-	
+
 	until [ -f "$CUSTOM_BRANDING_PNG" ]; do
 		echo "$(date "+%a %h %d %H:%M:%S"): Waiting for branding image from Jamf Pro." >> "$DEP_NOTIFY_DEBUG"
 		sleep 1
