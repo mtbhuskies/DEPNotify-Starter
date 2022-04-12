@@ -201,7 +201,7 @@ TRIGGER="event"
 # EULA Variables to Modify
 #########################################################################################
 # EULA configuration
-  EULA_ENABLED=false # Set variable to true or false
+  EULA_ENABLED=true # Set variable to true or false
 
   # EULA status bar text
     EULA_STATUS="Waiting on completion of EULA acceptance"
@@ -210,7 +210,7 @@ TRIGGER="event"
     EULA_BUTTON="Read and Agree to EULA"
 
   # EULA Screen Title
-    EULA_MAIN_TITLE="Organization End User License Agreement"
+    EULA_MAIN_TITLE="Ruffwear's End User License Agreement"
 
   # EULA Subtitle
     EULA_SUBTITLE="Please agree to the following terms and conditions to start configuration of this Mac"
